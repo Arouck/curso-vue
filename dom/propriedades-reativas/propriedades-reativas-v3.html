@@ -1,0 +1,49 @@
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<div id="app">
+    <button v-on:click="raiseValue1">Aumentar 1</button>
+    <button v-on:click="raiseValue2">Aumentar 2</button>
+    <button v-on:click="reduceValue1">Diminuir 1</button>
+    <hr>
+    <p>{{ value1 }} | {{ value2 }}</p>
+    <p>Resultado: {{ getResult }}</p>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            value1: 0,
+            value2: 0,
+        },
+        computed: {
+            getResult() {
+                console.log('O método getResult foi chamado...');
+                return this.value1 >= 10 ?
+                    "Valor 1 maior ou igual a 10" :
+                    "Valor 1 menor que 10";
+            }
+        },
+        watch: {
+            value1(newValue, oldValue) {
+                console.log('newValue: ' + newValue + ', oldValue: ' + oldValue);
+                setTimeout(() => {
+                    this.value1 = 0;
+                }, 2000);
+            },
+        },
+        methods: {
+            raiseValue1() {
+                this.value1++;
+            },
+
+            reduceValue1() {
+                this.value1--;
+            },
+
+            raiseValue2() {
+                this.value2++;
+            }
+        }
+    })
+</script>
