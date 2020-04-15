@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font: 300 14px Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    width: 100%;
+    padding: 0.8%;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 1%;
+    background-color: brown;
+    border-radius: 8px;
+    color: #fff;
+}
+
+button {
+    padding: 1%;
+    border-radius: 5px;
+    border: 1px solid #888888;
+    box-shadow: 0 0 3px #888888;
+    cursor: pointer;
+    font-size: 20px;
+    margin: 0 4% 0 4%;
+}
+
+button:active {
+    filter: brightness(90%);
+}
+
+#status-view {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1% 2% 0 2%;
+    box-shadow: 0px 0px 10px #888888;
+}
+
+#status {
+    padding: 2% 3% 2% 3%;
+    text-align: center;
+    width: 50%;
+}
+
+#total-life {
+    width: 100%;
+    height: 30px;
+    border: 1px solid #888888;
+    margin-top: 4%;
+    margin-bottom: 2%;
+}
+
+#monster-life, #player-life {
+    height: 100%;
+    background-color: #38a656;
+}
+
+h1, h2 {
+    font-weight: 300;
+}
+
+#options {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1% 2% 0 2%;
+    box-shadow: 0px 0px 10px #888888;
+    padding: 3% 0 3% 0;
+}
+
+#start {
+    background-color: #545a9e;
+    color: #FFF;
+}
+
+#attack {
+    background-color: #ad0000;
+    color: #FFF;
+}
+
+#special-attack {
+    background-color: #e8f011;
+    color: #1c1c1c;
+}
+
+#heal {
+    background-color: #96dd7e;
+    color: #FFF;
+}
+
+#quit {
+    background-color: #a3a3a3;
+    color: #000000;
+}
+
+#all-actions {
+    align-items: center;
+    text-align: center;
+    margin: 1% 2% 0 2%;
+    box-shadow: 0px 0px 10px #888888;
+    padding: 2% 5% 5% 5%;
+}
+
+.player_attack {
+    background-color: #ad0000;
+}
+
+.monster_attack {
+    background-color: #0e3a3b;
+}
+
+.player_heal {
+    background-color: #96dd7e;
+}
+
+.player_special_attack {
+    background-color: #8c0000;
+}

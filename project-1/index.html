@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://unpkg.com/vue"></script>
+<link rel="stylesheet" href="./styles/style.css">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monster Killer</title>
+</head>
+
+<body>
+    <div id="app">
+        <div id="status-view">
+            <div id="status">
+                <h1>Player</h1>
+                <div id="total-life">
+                    <div id="player-life"
+                        :style='{width: `${playerPointsOfLife}%`}'></div>
+                </div>
+                <h2>100%</h2>
+            </div>
+            <div id="status">
+                <h1>Monster</h1>
+                <div id="total-life">
+                    <div id="monster-life"
+                        :style='{width: `${monsterPointsOfLife}%`}'></div>
+                </div>
+                <h2>100%</h2>
+            </div>
+        </div>
+        <div id="options">
+            <template v-if='!isPlaying'>
+                <button id="start"
+                    @click='changeIsPlaying'>
+                    Start new game
+                </button>
+            </template>
+            <template v-else>
+                <button id="attack"
+                    @click='generatePlayerAttack'>
+                    Attack
+                </button>
+                <button id="special-attack"
+                    @click='generatePlayerSpecialAttack'>
+                    Special attack
+                </button>
+                <button id="heal"
+                    @click='generatePlayerHeal'>
+                    Heal
+                </button>
+                <button id="quit"
+                    @click='changeIsPlaying'>
+                    Quit
+                </button>
+            </template>
+        </div>
+        <div id="all-actions" v-show='!actionsIsEmpty'>
+            <ul class="actions">
+                <li v-for='action in actions' :class="action.type">{{ action.message }}</li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+<script src="./src/app.js"></script>
+
+</html>
