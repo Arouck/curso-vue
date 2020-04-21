@@ -1,20 +1,23 @@
 new Vue({
     el: '#app',
     data: {
-        playerPointsOfLife: '100%',
-        monsterPointsOfLife: '100%',
+        playerPointsOfLife: 100,
+        monsterPointsOfLife: 100,
         isPlaying: false,
         actionsIsEmpty: true,
         points: 0,
         action: {},
         actions: [],
+        finished: false,
     },
     methods: {
         changeIsPlaying() {
-            if (this.isPlaying) {
+            if (this.isPlaying && !this.finished) {
                 this.actions = [];
                 this.action = {};
                 this.actionsIsEmpty = true;
+                this.playerPointsOfLife = 100;
+                this.monsterPointsOfLife = 100;
             }
             this.isPlaying = !this.isPlaying;
         },
@@ -35,47 +38,31 @@ new Vue({
 
         generatePlayerAttack() {
             const attackPoints = Math.floor(this.generateRandomNumber(10, 0));
-            this.monsterPointsOfLife -= attackPoints;
+            this.decreaseMonstersLife(attackPoints);
             this.createAction('player_attack', attackPoints, `Player inflicts ${attackPoints} points of damage`);
             this.generateMonsterAttack();
         },
 
         generatePlayerHeal() {
             let healPoints = Math.floor(this.generateRandomNumber(13, 0));
-            if(this.playerPointsOfLife === '100%') {
-                this.createAction('player_heal', 0, `Player heals ${0} points of life, because its life is already full`);
-                this.generateMonsterAttack();
-            } else if (this.playerPointsOfLife + healPoints > 100) {
-                healPoints = 100 - this.playerPointsOfLife;
-                this.playerPointsOfLife += healPoints;
-                this.createAction('player_heal', healPoints, `Player heals ${healPoints} points of life`);
-                this.generateMonsterAttack();
-            } else {
-                this.playerPointsOfLife += healPoints;
-                this.createAction('player_heal', healPoints, `Player heals ${healPoints} points of life`);
-                this.generateMonsterAttack();
-            }
+            this.increasePlayersLife(healPoints);
         },
 
         generatePlayerSpecialAttack() {
             const attackPoints = Math.floor(this.generateRandomNumber(10, 0) * Math.random() * 3);
             const isCritical = this.decideIfIsACriticalAttack(attackPoints, 10);
-            if(monsterPointsOfLife - attackPoints < 0){
-                monsterPointsOfLife = 0;
-            } else {
-                this.monsterPointsOfLife -= attackPoints;
-            }
-            if(isCritical) {
+            this.decreaseMonstersLife(attackPoints);
+            if (isCritical) {
                 this.createAction('player_special_attack', attackPoints, `Player inflicts ${attackPoints} points of damage - CRITICAL`);
-            } else{
+            } else {
                 this.createAction('player_special_attack', attackPoints, `Player inflicts ${attackPoints} points of damage`);
             }
             this.generateMonsterAttack();
         },
 
         generateMonsterAttack() {
-            const attackPoints = Math.floor(this.generateRandomNumber(10, 0));
-            this.playerPointsOfLife -= attackPoints;
+            const attackPoints = Math.floor(this.generateRandomNumber(12, 0));
+            this.decreasePlayersLife(attackPoints);
             this.createAction('monster_attack', attackPoints, `Monster inflicts ${attackPoints} points of damage`);
         },
 
@@ -86,5 +73,39 @@ new Vue({
                 return false;
             }
         },
+
+        decreasePlayersLife(attackPoints) {
+            if (this.playerPointsOfLife - attackPoints < 0) {
+                this.playerPointsOfLife = 0;
+                this.finish();
+            } else {
+                this.playerPointsOfLife -= attackPoints;
+            }
+        },
+
+        decreaseMonstersLife(attackPoints) {
+            if (this.monsterPointsOfLife - attackPoints < 0) {
+                this.monsterPointsOfLife = 0;
+                this.finish();
+            } else {
+                this.monsterPointsOfLife -= attackPoints;
+            }
+        },
+
+        increasePlayersLife(healPoints) {
+            if (this.playerPointsOfLife === 100) {
+                healPoints = 0;
+            } else if (this.playerPointsOfLife + healPoints > 100) {
+                healPoints = 100 - this.playerPointsOfLife;
+            } else {
+                this.playerPointsOfLife += healPoints;
+            }
+            this.createAction('player_heal', healPoints, `Player heals ${healPoints} points of life`);
+            this.generateMonsterAttack();
+        },
+
+        finish() {
+            this.finished = true;
+        }
     },
 });

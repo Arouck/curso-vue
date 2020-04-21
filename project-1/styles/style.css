@@ -129,3 +129,20 @@ h1, h2 {
 .player_special_attack {
     background-color: #8c0000;
 }
+
+#winMessage {
+    color: #298c43;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+#loseMessage {
+    color: #ab0c29;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+#low-life {
+    height: 100%;
+    background-color: #ab0c29;
+}

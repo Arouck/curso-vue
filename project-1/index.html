@@ -15,43 +15,55 @@
             <div id="status">
                 <h1>Player</h1>
                 <div id="total-life">
-                    <div id="player-life"
-                        :style='{width: `${playerPointsOfLife}%`}'></div>
+                    <div id="player-life" :style='{width: `${playerPointsOfLife}%`}'
+                    v-if='playerPointsOfLife > 20'></div>
+                    <div id="low-life" :style='{width: `${playerPointsOfLife}%`}'
+                    v-if='playerPointsOfLife <= 20'></div>
                 </div>
-                <h2>100%</h2>
+                <h2>{{ playerPointsOfLife }}%</h2>
             </div>
             <div id="status">
                 <h1>Monster</h1>
                 <div id="total-life">
-                    <div id="monster-life"
-                        :style='{width: `${monsterPointsOfLife}%`}'></div>
+                    <div id="monster-life" :style='{width: `${monsterPointsOfLife}%`}'
+                    v-if='monsterPointsOfLife > 20'></div>
+                    <div id="low-life" :style='{width: `${monsterPointsOfLife}%`}'
+                    v-if='monsterPointsOfLife <= 20'></div>
                 </div>
-                <h2>100%</h2>
+                <h2>{{ monsterPointsOfLife }}%</h2>
             </div>
         </div>
         <div id="options">
             <template v-if='!isPlaying'>
-                <button id="start"
-                    @click='changeIsPlaying'>
+                <button id="start" @click='changeIsPlaying'>
                     Start new game
                 </button>
             </template>
-            <template v-else>
-                <button id="attack"
-                    @click='generatePlayerAttack'>
+            <template v-if='isPlaying && !finished'>
+                <button id="attack" @click='generatePlayerAttack'>
                     Attack
                 </button>
-                <button id="special-attack"
-                    @click='generatePlayerSpecialAttack'>
+                <button id="special-attack" @click='generatePlayerSpecialAttack'>
                     Special attack
                 </button>
-                <button id="heal"
-                    @click='generatePlayerHeal'>
+                <button id="heal" @click='generatePlayerHeal'>
                     Heal
                 </button>
-                <button id="quit"
-                    @click='changeIsPlaying'>
+                <button id="quit" @click='changeIsPlaying'>
                     Quit
+                </button>
+            </template>
+            <template v-if='finished'>
+                <h4 id='winMessage' 
+                v-show='monsterPointsOfLife == 0'>
+                    Você ganhou!
+                </h4>
+                <h4 id='loseMessage' 
+                v-show='playerPointsOfLife == 0'>
+                    Você perdeu!
+                </h4>
+                <button @click='finished = !finished;changeIsPlaying()'>
+                    Restart
                 </button>
             </template>
         </div>
