@@ -62,6 +62,10 @@
                 v-show='playerPointsOfLife == 0'>
                     Você perdeu!
                 </h4>
+                <h4 id='draw-message' 
+                v-show='playerPointsOfLife == 0 && monsterPointsOfLife == 0'>
+                    Você empatou!
+                </h4>
                 <button @click='finished = !finished;changeIsPlaying()'>
                     Restart
                 </button>
