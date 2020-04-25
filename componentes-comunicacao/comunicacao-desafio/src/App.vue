@@ -7,7 +7,7 @@
 
 <script>
 import List from "./components/List.vue";
-import Item from "./components/Item"
+import Item from "./components/Item";
 export default {
     name: "App",
     components: {
@@ -31,12 +31,11 @@ export default {
 }
 
 div#app {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 0 5% 0 5%;
-  height: 100vh;
-  background-color: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 5% 0 5%;
+    height: 100vh;
+    background-color: #fafafa;
 }
-
 </style>
