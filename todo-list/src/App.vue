@@ -1,12 +1,18 @@
 <template>
 	<div id="app">
 		<h1>Tarefas</h1>
+		<ProgressBar />
+		<Input />
+		<TaskList />
 	</div>
 </template>
 
 <script>
+import ProgressBar from './components/ProgressBar';
+import Input from './components/Input';
+import TaskList from './components/TaskList';
 export default {
-
+	components: { ProgressBar, Input, TaskList }
 }
 </script>
 
@@ -14,7 +20,7 @@ export default {
 	body {
 		font-family: 'Lato', sans-serif;
 		background: linear-gradient(to right, rgb(22, 34, 42), rgb(58, 96, 115));
-		color: #FFF;
+		color: #FFF; 
 	}
 
 	#app {
