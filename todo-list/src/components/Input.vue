@@ -1,6 +1,7 @@
 <template>
     <div id="taskForm">
-        <input type="text" placeholder="Type your task" v-model="task" />
+        <input type="text" placeholder="Type your task" v-model="task"
+            @keypress.enter="saveTask"/>
         <button @click="saveTask">+</button>
     </div>
 </template>
