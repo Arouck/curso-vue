@@ -8,6 +8,30 @@ export default new Vue({
 
         addNewTaskToList(task) {
             this.$on('addingTask', task);
+        },
+
+        removeTask(task) {
+            this.$emit('removingTask', task);
+        },
+
+        removeTaskFromList(task) {
+            this.$on('removingTask', task);
+        },
+
+        updateNumberOfTasks(numberOfTasks) {
+            this.$emit('updatingTotalOfTasks', numberOfTasks);
+        },
+
+        updateTotalOfTasks(numberOfTasks) {
+            this.$on('updatingTotalOfTasks', numberOfTasks);
+        },
+
+        updateNumberOfDoneTasks(done) {
+            this.$emit('updatingProgress', done);
+        },
+
+        updateProgress(done) {
+            this.$on('updatingProgress', done);
         }
     }
 });

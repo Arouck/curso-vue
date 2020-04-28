@@ -1,10 +1,11 @@
 <template>
     <div id="taskList">
-        <ul>
+        <ul v-if="taskList.length > 0">
             <li v-for="task in taskList" :key="task">
                 <Task :task="task" />
             </li>
         </ul>
+        <h2 v-else>Your life is up to date :)</h2>
     </div>
 </template>
 
@@ -24,6 +25,18 @@ export default {
         eventBus.addNewTaskToList(task => {
             if(!this.taskList.includes(task)) {
                 this.taskList.push(task);
+                eventBus.updateNumberOfTasks(this.taskList.length);
+            }
+        });
+
+        eventBus.removeTaskFromList(task => {
+            if(this.taskList.includes(task.task)) {
+                const index = this.taskList.indexOf(task.task);
+                this.taskList.splice(index, 1);
+                eventBus.updateNumberOfTasks(this.taskList.length);
+                if(task.taskStyle === 'doneTask') {
+                    eventBus.updateNumberOfDoneTasks(false);
+                }
             }
         });
     }
@@ -36,6 +49,8 @@ export default {
     align-items: center;
     width: 150vh;
     margin-top: 5%;
+    text-align: center;
+    justify-content: center;
 }
 
 #taskList ul {

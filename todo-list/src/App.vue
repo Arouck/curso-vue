@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		<h1>Tarefas</h1>
+		<h1>Tasks</h1>
 		<ProgressBar />
 		<Input />
 		<TaskList />
