@@ -1,133 +1,90 @@
 <script src="https://kit.fontawesome.com/yourcode.js"></script>
 
 <template>
-    <div :class="backBox">
-        <div :class="taskStyle">
-            <div id="removeContainer">
-                <button :class="remove"
-                    @click="removeTask">x</button>
-            </div>
-            <div id="textContainer" @click="changeTaskStyle">
-                <p id="taskName">{{ task }}</p>
-            </div>
-        </div>
+    <div class="task" :class="stateClass"
+        @click="$emit('changedTask', task)">
+        <button class="remove" @click.stop="removeTask">x</button>
+        <p id="taskName">{{ task.name }}</p>
     </div>
 </template>
 
 <script>
-import eventBus from '@/eventBus.js';
+import eventBus from "@/eventBus.js";
 export default {
     props: {
-        task: String,
-        required: true,
+        task: Object
     },
     data() {
-        return{
-            taskStyle: 'undoneTask',
-            backBox: 'undoneTaskBackBox',
-            remove: 'undoneTaskRemove',
+        return {
+            taskStyle: "undoneTask",
+            backBox: "undoneTaskBackBox",
+            remove: "undoneTaskRemove"
         };
     },
     methods: {
-        changeTaskStyle() {
-            if(this.taskStyle === 'undoneTask') {
-                this.taskStyle = 'doneTask';
-                this.backBox = 'doneTaskBackBox';
-                this.remove = 'doneTaskRemove';
-                eventBus.updateNumberOfDoneTasks(true);
-            } else {
-                this.taskStyle = 'undoneTask';
-                this.backBox = 'undoneTaskBackBox';
-                this.remove = 'undoneTaskRemove';
-                eventBus.updateNumberOfDoneTasks(false);
-            }
-        },
-
         removeTask() {
-            eventBus.removeTask(this);
+            eventBus.removeTask(this.task);
+        }
+    },
+    computed: {
+        stateClass() {
+            return {
+                pending: this.task.pending,
+                done: !this.task.pending
+            };
         }
     }
 };
 </script>
 
 <style scoped>
-.undoneTaskBackBox {
-    background-color: #d61e1e;
-    width: 18vh;
+.task {
+    box-sizing: border-box;
+    width: 25vh;
     height: 12vh;
-    overflow: hidden;
-    border-radius: 10px;
-    float: left;
-    margin-left: 2%;
-}
-
-.doneTaskBackBox {
-    background-color: #1f8708;
-    width: 18vh;
-    height: 12vh;
-    overflow: hidden;
-    border-radius: 10px;
-    float: left;
-    margin-left: 2%;
-}
-
-.undoneTask {
-    background-color: #ff4f4f;
-    width: 95%;
-    height: 100%;
-    float: right;
+    padding: 3%;
+    border-radius: 0.5vh;
     cursor: pointer;
-}
-
-.doneTask {
-    background-color: #7beb63;
-    width: 95%;
-    height: 100%;
-    float: right;
-    cursor: pointer;
-    text-decoration-line: line-through;
-    opacity: 0.8;
-}
-
-.undoneTaskRemove {
-    background-color: #d61e1e;
-    outline: none;
-    cursor: pointer;
-    border: none;
-    width: 20px;
-    margin: 1vh 0 0 0;
-    border-radius: 20px;
-    color: #fff;
-}
-
-.doneTaskRemove {
-    background-color: #1f8708;
-    outline: none;
-    cursor: pointer;
-    border: none;
-    width: 20px;
-    margin: 1vh 0 0 0;
-    border-radius: 20px;
-    color: #fff;
-}
-
-#textContainer {
-    height: 100%;
+    user-select: none;
     display: flex;
-    text-align: center;
+    justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 #taskName {
-    margin: 0 1% 0 3%;
+    font-weight: 300;
+    font-size: 3vh;
 }
 
-#removeContainer {
-    display: flex;
-    text-align: center;
-    align-items: center;
-    width: 15%;
-    float: right;
+.remove {
+    position: absolute;
+    right: 3%;
+    top: 3%;
+    border-radius: 50%;
+    border: none;
+    color: #FFF;
+    font-weight: 500;
 }
 
+.pending {
+    border-left: 12px solid #B73229;
+    background-color: #F44336;
+    color: #FFF
+}
+
+.done {
+    color: #d4d4d4;
+    border-left: 12px solid #0A8F08;
+    background-color: #4CAF50;
+    text-decoration: line-through;
+}
+
+.pending .remove {
+        background-color: #B73229;
+}
+
+.done .remove {
+        background-color: #0A8F08;
+}
 </style>

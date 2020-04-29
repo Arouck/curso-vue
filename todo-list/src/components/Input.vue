@@ -1,8 +1,8 @@
 <template>
     <div id="taskForm">
-        <input type="text" placeholder="Type your task" v-model="task"
-            @keypress.enter="saveTask"/>
-        <button @click="saveTask">+</button>
+        <input type="text" placeholder="Type your task" v-model="name"
+            @keypress.enter="addNewTask"/>
+        <button @click="addNewTask">+</button>
     </div>
 </template>
 
@@ -12,15 +12,15 @@ import eventBus from "@/eventBus.js";
 export default {
     data() {
         return {
-            task: ""
+            name: ""
         };
     },
 
     methods: {
-        saveTask() {
-            if (!(this.task === "")) {
-                eventBus.saveTask(this.task);
-                this.task = "";
+        addNewTask() {
+            if (!(this.name === "")) {
+                eventBus.addNewTask({ name: this.name });
+                this.name = "";
             }
         }
     }
@@ -43,9 +43,10 @@ export default {
     width: 90%;
     border: none;
     outline: none;
-    background-color: #e3e3e3;
+    background-color: #FFF2;
     font-size: 125%;
-    color: #7d7d7d;
+    color: #DDD;
+    padding-left: 0.5vh;
 }
 
 #taskForm button {

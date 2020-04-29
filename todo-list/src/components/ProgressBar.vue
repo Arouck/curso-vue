@@ -1,38 +1,28 @@
 <template>
-    <div id="bar" v-show="totalOfTasks > 0">
+    <div id="bar" v-show="totalTasks > 0">
         <div id="progress" :style="{width: `${updateProgressBar}%`}"></div>
         <p>{{ updateProgressBar }}%</p>
     </div>
 </template>
 
 <script>
-import eventBus from "@/eventBus.js";
 export default {
-    data() {
-        return {
-            doneTasks: 0,
-            totalOfTasks: 0
-        };
-    },
+    props: {
+        progress: {
+            type:Number,
+            default: 0,
+        },
 
-    created() {
-        eventBus.updateTotalOfTasks(numberOfTasks => {
-            this.totalOfTasks = numberOfTasks;
-        });
-
-        eventBus.updateProgress(done => {
-            if (done) {
-                this.doneTasks++;
-            } else {
-                this.doneTasks--;
-            }
-        });
+        totalTasks: {
+            type: Number,
+            default: 0,
+        }
     },
 
     computed: {
         updateProgressBar() {
-            if (this.totalOfTasks != 0) {
-                return Math.floor((this.doneTasks / this.totalOfTasks) * 100);
+            if (this.totalTasks != 0) {
+                return Math.floor((this.progress / this.totalTasks) * 100);
             } else {
                 return 0;
             }

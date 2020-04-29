@@ -2,36 +2,20 @@ import Vue from 'vue';
 
 export default new Vue({
     methods: {
-        saveTask(task) {
-            this.$emit('addingTask', task);
+        addNewTask(newTask) {
+            this.$emit('addedTask', newTask);
         },
 
-        addNewTaskToList(task) {
-            this.$on('addingTask', task);
+        addNewTaskToList(newTask) {
+            this.$on('addedTask', newTask);
         },
 
         removeTask(task) {
-            this.$emit('removingTask', task);
+            this.$emit('removedTask', task);
         },
 
         removeTaskFromList(task) {
-            this.$on('removingTask', task);
-        },
-
-        updateNumberOfTasks(numberOfTasks) {
-            this.$emit('updatingTotalOfTasks', numberOfTasks);
-        },
-
-        updateTotalOfTasks(numberOfTasks) {
-            this.$on('updatingTotalOfTasks', numberOfTasks);
-        },
-
-        updateNumberOfDoneTasks(done) {
-            this.$emit('updatingProgress', done);
-        },
-
-        updateProgress(done) {
-            this.$on('updatingProgress', done);
+            this.$on('removedTask', task);
         }
     }
 });

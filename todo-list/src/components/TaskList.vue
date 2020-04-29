@@ -1,8 +1,8 @@
 <template>
     <div id="taskList">
         <ul v-if="taskList.length > 0">
-            <li v-for="task in taskList" :key="task">
-                <Task :task="task" />
+            <li v-for="(task, index) in taskList" :key="task.name">
+                <Task :task="task" @changedTask="toggleTaskState(task, index)" />
             </li>
         </ul>
         <h2 v-else>Your life is up to date :)</h2>
@@ -11,34 +11,56 @@
 
 <script>
 import Task from "./Task";
-import eventBus from '@/eventBus.js';
+import eventBus from "@/eventBus.js";
 
 export default {
     components: { Task },
     data() {
         return {
-            taskList: [],
+            taskList: []
+        };
+    },
+
+    watch: {
+        taskList: {
+            deep: true,
+            handler() {
+                localStorage.setItem("tasks", JSON.stringify(this.taskList));
+                this.$emit("changedList", this.taskList);
+            }
         }
     },
 
     created() {
-        eventBus.addNewTaskToList(task => {
-            if(!this.taskList.includes(task)) {
-                this.taskList.push(task);
-                eventBus.updateNumberOfTasks(this.taskList.length);
+        eventBus.addNewTaskToList(newTask => {
+            const tasksNames = this.taskList.map(task => task.name);
+            const alreadyExists = tasksNames.includes(newTask.name);
+            if (!alreadyExists) {
+                this.taskList.push({
+                    name: newTask.name,
+                    pending: newTask.pending || true
+                });
             }
         });
 
         eventBus.removeTaskFromList(task => {
-            if(this.taskList.includes(task.task)) {
-                const index = this.taskList.indexOf(task.task);
+            if (this.taskList.includes(task)) {
+                const index = this.taskList.indexOf(task);
                 this.taskList.splice(index, 1);
-                eventBus.updateNumberOfTasks(this.taskList.length);
-                if(task.taskStyle === 'doneTask') {
-                    eventBus.updateNumberOfDoneTasks(false);
-                }
             }
         });
+
+        const json = localStorage.getItem("tasks");
+        const array = typeof json != undefined ? JSON.parse(json) : [];
+        this.taskList = Array.isArray(array) ? array : [];
+    },
+
+    methods: {
+        toggleTaskState(task, index) {
+            if (this.taskList.includes(task)) {
+                this.taskList[index].pending = !this.taskList[index].pending;
+            }
+        }
     }
 };
 </script>
@@ -47,10 +69,10 @@ export default {
 #taskList {
     display: flex;
     align-items: center;
-    width: 150vh;
-    margin-top: 5%;
-    text-align: center;
     justify-content: center;
+    width: 150vh;
+    margin-top: 3%;
+    text-align: center;
 }
 
 #taskList ul {
@@ -65,5 +87,9 @@ export default {
 
 #taskList ul li {
     margin: 1%;
+}
+
+#taskList h2 {
+    color: #aaa;
 }
 </style>
