@@ -1,6 +1,6 @@
 <template>
     <div id="app" class="container">
-        <h1>Animações</h1>
+        <!-- <h1>Animações</h1>
         <hr />
         <b-button variant="primary" class="mb-4" @click="exibir = !exibir">Mostrar Mensagem</b-button>
 
@@ -22,69 +22,119 @@
 
         <hr />
 
-        <button @click="exibir2 = !exibir2">Mostrar</button>
+        <button @click="exibir2 = !exibir2">Alternar</button>
 
         <transition
-			@before-enter="beforeEnter"
-			@enter="enter"
-			@after-enter="afterEnter"
-			@enter-cancelled="enterCancelled"
-			@before-leave="beforeLeave"
-			@leave="leave"
-			@after-leave="afterLeave"
-			@leave-cancelled="leaveCancelled">
+            @before-enter="beforeEnter"
+            @enter="enter"
+            @before-leave="beforeLeave"
+            @leave="leave"
+        >
             <div v-if="exibir2" class="caixa"></div>
         </transition>
+
+        <hr />
+        <div class="mb-4">
+            <b-button
+                variant="primary"
+                class="mr-4"
+                @click="componenteSelecionado = 'AlertaInfo'"
+            >Info</b-button>
+            <b-button
+                variant="secondary"
+                @click="componenteSelecionado = 'AlertaAdvertencia'"
+            >Advertencia</b-button>
+        </div>
+        <transition name="fade" mode="out-in">
+            <component :is="componenteSelecionado"></component>
+        </transition>-->
+
+        <hr />
+        <b-button variant="primary" @click="adicionarAluno" class="mb-4">Adicionar Aluno</b-button>
+        <transition-group name="slide" tag="div">
+            <b-list-group v-for="(aluno, i) in alunos" :key="aluno">
+                <b-list-group-item @click="removerAluno(i)">{{ aluno }}</b-list-group-item>
+            </b-list-group>
+        </transition-group>
     </div>
 </template>
 
 <script>
+import AlertaAdvertencia from "./AlertaAdvertencia.vue";
+import AlertaInfo from "./AlertaInfo.vue";
+
 export default {
+    components: { AlertaAdvertencia, AlertaInfo },
     data() {
         return {
             mensagem: "Mensagem exibida para o usuário!",
             exibir: false,
             exibir2: true,
-            tipoAnimacao: "fade"
+            tipoAnimacao: "fade",
+            larguraBase: 0,
+            componenteSelecionado: "AlertaInfo",
+            alunos: ["Roberto", "Julia", "Daniel", "Teresa"]
         };
-	},
-	methods: {
-		beforeEnter(el) {
-			console.log('beforeEnter');
-		},
-		enter(el, done) {
-			console.log('enter');
-			done();
-		},
-		afterEnter(el) {
-			console.log('afterEnter');
-		},
-		enterCancelled() {
-			console.log('enterCancelled');
-		},
-		beforeLeave(el) {
-			console.log('beforeLeave');
-		},
-		leave(el, done) {
-			console.log('leave');
-			done();
-		},
-		afterLeave(el) {
-			console.log('afterLeave');
-		},
-		leaveCancelled() {
-			console.log('leaveCancelled');
-		}
-	}
+    },
+    methods: {
+        adicionarAluno() {
+            const novoAluno = Math.random()
+                .toString(36)
+                .substring(2);
+            this.alunos.push(novoAluno);
+        },
+        removerAluno(indice) {
+            this.alunos.splice(indice, 1);
+        },
+        animar(el, done, negativo) {
+            let rodada = 1;
+            const temporizador = setInterval(() => {
+                const novaLargura =
+                    this.larguraBase + (negativo ? -rodada * 10 : rodada * 10);
+                el.style.width = `${novaLargura}px`;
+                rodada++;
+                if (rodada > 30) {
+                    clearInterval(temporizador);
+                    done();
+                }
+            }, 20);
+        },
+        beforeEnter(el) {
+            this.larguraBase = 0;
+            el.style.width = `${this.larguraBase}px`;
+        },
+        enter(el, done) {
+            this.animar(el, done, false);
+        },
+        // afterEnter(el) {
+        // 	console.log('afterEnter');
+        // },
+        // enterCancelled() {
+        // 	console.log('enterCancelled');
+        // },
+        beforeLeave(el) {
+            this.larguraBase = 300;
+            el.style.width = `${this.larguraBase}px`;
+        },
+        leave(el, done) {
+            this.animar(el, done, true);
+        }
+        // afterLeave(el) {
+        // 	console.log('afterLeave');
+        // },
+        // leaveCancelled() {
+        // 	console.log('leaveCancelled');
+        // }
+    }
 };
 </script>
 
 <style>
 .caixa {
-	height: 100px;
-	width: 300px;
-	margin: 30px auto;
-	background-color: lightgreen;
+    height: 100px;
+    width: 300px;
+    margin: 30px auto;
+    background-color: lightgreen;
 }
 
 #app {
@@ -131,6 +181,7 @@ export default {
 }
 
 .slide-leave-active {
+    position: absolute;
     animation: slide-out 2s ease;
     transition: opacity 2s;
 }
@@ -138,5 +189,9 @@ export default {
 .slide-enter,
 .slide-leave-to {
     opacity: 0;
+}
+
+.slide-move {
+    transition: transform 1s;
 }
 </style>
